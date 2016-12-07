@@ -19,7 +19,7 @@ import ArticlesAccordionView from './app/components/ArticlesAccordionView';
 import TransportationInfoView from './app/components/TransportationInfoView';
 
 
-export default class Test extends Component {
+export default class HBLCommute extends Component {
 
 	constructor(props) {
 		super(props);
@@ -60,4 +60,4 @@ export default class Test extends Component {
 	}
 }
 
-AppRegistry.registerComponent('HBLCommute', () => Test);
+AppRegistry.registerComponent('HBLCommute', () => HBLCommute);

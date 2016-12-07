@@ -15,8 +15,9 @@ import {
 } from 'react-native';
 import NavigationBarWrapper from './app/components/NavigationBarWrapper'
 import ScrollViewContainer from './app/components/ScrollViewContainer';
-import ArticlesAccordionView from './app/components/ArticlesAccordionView';
+import ArticlesSwipeListView from './app/components/ArticlesSwipeListView';
 import TransportationInfoView from './app/components/TransportationInfoView';
+import * as GLOBAL from './app/Globals';
 
 
 export default class HBLCommute extends Component {
@@ -47,17 +48,25 @@ export default class HBLCommute extends Component {
 		};
 
 		return (
-            <View>
-              <NavigationBarWrapper
-                  title={ titleConfig }
-                  rightButton={ rightButtonConfig } />
-              <ScrollViewContainer>
-                <ArticlesAccordionView articles={ this.articles }></ArticlesAccordionView>
-              </ScrollViewContainer>
-              <TransportationInfoView />
-            </View>
+			<View style={ styles.mainView }>
+				<NavigationBarWrapper title={ titleConfig }
+				                      rightButton={ rightButtonConfig } />
+				<ScrollViewContainer>
+					<ArticlesSwipeListView articles={ this.articles }></ArticlesSwipeListView>
+				</ScrollViewContainer>
+				<TransportationInfoView/>
+			</View>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+
+	mainView: {
+		flex: 1,
+		backgroundColor: GLOBAL.COLOR.GREY_BACKGROUND
+	}
+
+});
 
 AppRegistry.registerComponent('HBLCommute', () => HBLCommute);

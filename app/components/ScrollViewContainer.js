@@ -4,6 +4,7 @@ import {
 	ScrollView,
 	StyleSheet
 } from 'react-native';
+import * as GLOBAL from '../Globals';
 
 class ScrollViewContainer extends Component {
 
@@ -20,7 +21,7 @@ class ScrollViewContainer extends Component {
 const styles = StyleSheet.create({
 
 	scrollView: {
-		backgroundColor: '#f7f5f3'
+		backgroundColor: GLOBAL.COLOR.GREY_BACKGROUND,
 	}
 
 });

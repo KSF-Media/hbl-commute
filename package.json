@@ -13,6 +13,7 @@
     "react-native": "0.39.0",
     "react-native-animatable": "^1.1.0",
     "react-native-collapsible": "git://github.com/relayfoods/react-native-collapsible.git#collapsible-not-expanding-temp-fix",
+    "react-native-device-info": "^0.9.7",
     "react-native-navbar": "^1.5.4",
     "react-native-vector-icons": "^3.0.0"
   },

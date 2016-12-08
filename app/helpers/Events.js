@@ -2,13 +2,16 @@
 export function TriggerEvent(params){
 
     //alert('Event fired');
-    fetch('https://path.to/endpoint', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(params)
+    fetch('https://rvfa2fac83.execute-api.eu-central-1.amazonaws.com/prod/insertAppData', {
+        method: 'POST',
+        headers: {
+            //'Accept': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Cache-Control': 'no-cache'
+        },
+        body: JSON.stringify({
+            "TableName":"events",
+            "Item": params
+        })
     })
-
 }

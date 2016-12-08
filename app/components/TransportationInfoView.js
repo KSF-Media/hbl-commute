@@ -70,7 +70,7 @@ function slideRightAnimation(fromValue) {
 			['translateX']: fromValue,
 		},
 		to: {
-			['translateX']: Dimensions.get('window').width-fromValue,
+			['translateX']: Dimensions.get('window').width-fromValue-50,
 		},
 	};
 }
@@ -113,11 +113,13 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		position: 'absolute',
 		right: 10,
-		top: 5,
+		top: 4,
 		borderColor: '#dddddd',
 		borderWidth: 1,
 		paddingLeft: 3,
-		paddingRight: 3
+		paddingRight: 3,
+		paddingTop: 2,
+		textAlign: 'center'
 	},
 
 	transportationInfoVehicle: {

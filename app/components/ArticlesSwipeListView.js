@@ -8,7 +8,8 @@ import {
 	TouchableOpacity,
 	TouchableHighlight,
 	View,
-	Modal
+	Modal,
+	Navigator
 } from 'react-native';
 import SwipeListView from './SwipeListView';
 import ModalWrapper from './ModalWrapper';
@@ -19,6 +20,12 @@ import {TriggerEvent} from '../helpers/Events';
 const heartIcon = (<Icon name="heart" size={ 30 } color={ GLOBAL.COLOR.POSITIVE } />);
 const timesIcon = (<Icon name="times" size={ 30 } color={ GLOBAL.COLOR.NEGATIVE } />);
 const starIcon = (<Icon name="star" size={ 30 } color={ GLOBAL.COLOR.HIGHLIGHT } />);
+
+var Routes = {
+	modal: {
+	component: ModalWrapper
+	}
+}
 
 export default class ArticlesSwipeListView extends Component {
 
@@ -36,12 +43,12 @@ export default class ArticlesSwipeListView extends Component {
 
 	onRowDeleteLeft(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleDeleted', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID });
+		TriggerEvent({ Event:'articleDeleted', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
 	}
 
 	onRowDeleteRight(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleSaved', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID });
+		TriggerEvent({ Event:'articleSaved', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
 	}
 
 	deleteRow(secId, rowId, rowMap) {

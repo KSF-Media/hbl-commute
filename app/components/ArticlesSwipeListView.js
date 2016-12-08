@@ -12,6 +12,7 @@ import {
 import SwipeListView from './SwipeListView';
 import * as GLOBAL from '../Globals';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {TriggerEvent} from '../helpers/Events';
 
 const heartIcon = (<Icon name="heart" size={ 30 } color={ GLOBAL.COLOR.POSITIVE } />);
 const timesIcon = (<Icon name="times" size={ 30 } color={ GLOBAL.COLOR.NEGATIVE } />);
@@ -33,10 +34,12 @@ export default class ArticlesSwipeListView extends Component {
 
 	onRowDeleteLeft(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
+		TriggerEvent({ Event:'articleDeleted', Uuid:'Test' });
 	}
 
 	onRowDeleteRight(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
+		TriggerEvent({ Event:'articleSaved', Uuid:'Test' });
 	}
 
 	deleteRow(secId, rowId, rowMap) {

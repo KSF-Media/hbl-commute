@@ -2,51 +2,54 @@
 import React, { Component } from 'react';
 import {
 	StyleSheet,
-	View
+	View,
+	Animated
 } from 'react-native';
 import NavigationBarWrapper from '../components/NavigationBarWrapper'
-import ScrollViewContainer from '../components/ScrollViewContainer';
 import ArticlesSwipeListView from '../components/ArticlesSwipeListView';
 import TransportationInfoView from '../components/TransportationInfoView';
+import LoadingView from '../components/LoadingView';
 import * as GLOBAL from '../Globals';
+import { FetchArticles } from '../helpers/Articles';
 
 export default class MainView extends Component {
 
 	constructor(props) {
 		super(props);
 		this.props = props;
-
-		var lorem_ipsum = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti. Lorem ipsum ligula ut hendrerit mollis, ipsum erat vehicula risus, eu suscipit sem libero nec erat. Aliquam erat volutpat. Sed congue augue vitae neque. Nulla consectetuer porttitor pede. Fusce purus morbi tortor magna condimentum vel, placerat id blandit sit amet tortor.\n\nMauris sed libero. Suspendisse facilisis nulla in lacinia laoreet, lorem velit accumsan velit vel mattis libero nisl et sem. Proin interdum maecenas massa turpis sagittis in, interdum non lobortis vitae massa. Quisque purus lectus, posuere eget imperdiet nec sodales id arcu. Vestibulum elit pede dictum eu, viverra non tincidunt eu ligula.\n\nNam molestie nec tortor. Donec placerat leo sit amet velit. Vestibulum id justo ut vitae massa. Proin in dolor mauris consequat aliquam. Donec ipsum, vestibulum ullamcorper venenatis augue. Aliquam tempus nisi in auctor vulputate, erat felis pellentesque augue nec, pellentesque lectus justo nec erat. Aliquam et nisl. Quisque sit amet dolor in justo pretium condimentum.\n\nVivamus placerat lacus vel vehicula scelerisque, dui enim adipiscing lacus sit amet sagittis, libero enim vitae mi. In neque magna posuere, euismod ac tincidunt tempor est. Ut suscipit nisi eu purus. Proin ut pede mauris eget ipsum. Integer vel quam nunc commodo consequat. Integer ac eros eu tellus dignissim viverra. Maecenas erat aliquam erat volutpat. Ut venenatis ipsum quis turpis. Integer cursus scelerisque lorem. Sed nec mauris id quam blandit consequat. Cras nibh mi hendrerit vitae, dapibus et aliquam et magna. Nulla vitae elit. Mauris consectetuer odio vitae augue.",
-			url = 'https://www.hbl.fi/';
+		this.loading = true;
 		this.state = {
-			articles: [
-				{ uuid: 1, mainTag: "Skottdramat i Imatra", title: "Två knivdödade vid skola i Norge", leadIn: "Två personer, en kvinna och en pojke, har avlidit efter att blivit attackerade med kniv vid en skola i Kristiansand i södra Norge.", url: url, content: lorem_ipsum, publishedAt: 1481200819229 },
-				{ uuid: 2, mainTag: "Test 1", title: "Sjuårings tystnad på Twitter oroar världen", leadIn: "En sjuårings Twitterkonto från de rebellkontrollerade östra delarna av Aleppo lorem ipsum.", imageUrl: 'https://doeho6k8shw5z.cloudfront.net/imengine/image.php?uuid=ae950290-53de-426f-84db-d8c2d51958de&type=preview&source=ae950290-53de-426f-84db-d8c2d51958de&function=hardcrop&width=1376&height=777&q=80', url: url, content: lorem_ipsum, publishedAt: 1481200819229 },
-				{ uuid: 3, mainTag: "Test 2", title: "Valls avgår – vill bli president", leadIn: "Frankrikes presidentval i vår står troligen mellan högerns François Fillon och lorem ipsum dolor sit amet.", imageUrl: 'https://doeho6k8shw5z.cloudfront.net/imengine/image.php?uuid=9ef2f30a-2ed3-4d40-bd4e-7d56fca21bc7&type=preview&source=9ef2f30a-2ed3-4d40-bd4e-7d56fca21bc7&function=hardcrop&width=1376&height=897&q=80', url: url, content: lorem_ipsum, publishedAt: 1481200819229 },
-				{ uuid: 4, mainTag: "Test 3", title: "Pekka Haavisto överväger presidentkandidatur", leadIn: "De grönas riksdagsledamot Pekka Haavisto säger att han överväger att ställa upp dolor sit amet.", imageUrl: 'https://doeho6k8shw5z.cloudfront.net/imengine/image.php?uuid=f6d5eb2b-1830-4ddc-a265-e1d17570053a&type=preview&source=f6d5eb2b-1830-4ddc-a265-e1d17570053a&function=hardcrop&width=1376&height=936&q=80', url: url, content: lorem_ipsum, publishedAt: 1481200819229 },
-				{ uuid: 5, mainTag: "Test 4", title: "Många döda i brand på lyxhotell i Pakistan", leadIn: "Minst elva personer omkom och 75 skadades i en brand på ett fyrstjärnigt hotell lorem ipsum dolor sit amet.", imageUrl: 'https://doeho6k8shw5z.cloudfront.net/imengine/image.php?uuid=cbe27d56-d36b-4978-879e-5719c6636b5c&type=preview&source=cbe27d56-d36b-4978-879e-5719c6636b5c&function=hardcrop&width=1376&height=902&q=80', url: url, content: lorem_ipsum, publishedAt: 1481200819229 }
-			]
-		}
+			articles: []
+		};
 	}
 
 	render() {
-		var self = this,
-			rightButtonConfig = {
-			title: 'Mitt läslista',
-			handler: function () {
-				self.props.navigator.push(GLOBAL.ROUTES[1]);
-			}
-		};
+		var self = this;
 
-		return (
-			<View style={ styles.mainView }>
-				<NavigationBarWrapper rightButton={ rightButtonConfig } />
-				<ScrollViewContainer>
+		if(this.loading) {
+			FetchArticles('https://rvfa2fac83.execute-api.eu-central-1.amazonaws.com/prod/getContentForUser', this);
+
+			return (
+				<View style={ styles.mainView }>
+					<LoadingView />
+				</View>
+			);
+		} else {
+			var rightButtonConfig = {
+				title: 'Mitt läslista',
+				handler: function () {
+					self.props.navigator.push(GLOBAL.ROUTES[1]);
+				}
+			};
+
+			return (
+				<Animated.View style={ [styles.mainView, { opacity: this.state.fadeAnim }] }>
+					<NavigationBarWrapper rightButton={ rightButtonConfig } />
 					<ArticlesSwipeListView articles={ this.state.articles }></ArticlesSwipeListView>
-				</ScrollViewContainer>
-				<TransportationInfoView/>
-			</View>
-		);
+					<TransportationInfoView/>
+				</Animated.View>
+			);
+		}
 	}
 }
 

@@ -85,8 +85,10 @@ export default class ArticlesSwipeListView extends Component {
 	}
 
 	timestampToHoursAndMinutes(timestamp) {
-		var t = new Date(timestamp);
-		return t.getHours() + ":" + t.getMinutes();
+		var t = new Date(timestamp),
+			hours = ('0' + t.getHours()).slice(-2),
+			minutes = ('0' + t.getMinutes()).slice(-2);
+		return hours + ":" + minutes;
 	}
 
 	_renderVisibleRow(article) {
@@ -99,7 +101,7 @@ export default class ArticlesSwipeListView extends Component {
 					<View style={ [styles.articleReadIndicator, (this.isArticleRead(article) ? styles.articleReadIndicatorRead : '' )] }></View>
 					<Text style={ styles.articleTitle }>{ article.title }</Text>
 					<View style={ styles.articleMainTagAndPublishedAt }>
-						<Text style={ styles.articleMainTag }>{ article.mainTag.toUpperCase() }</Text>
+						<Text style={ styles.articleMainTag }>{ (article.mainTag ? article.mainTag.toUpperCase() : false) }</Text>
 						<Text style={ styles.articlePublishedAt }>{ this.timestampToHoursAndMinutes(article.publishedAt) }</Text>
 					</View>
 				</View>

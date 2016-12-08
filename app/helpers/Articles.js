@@ -1,14 +1,25 @@
-// params is some object { param1: 'value1', param2: 'value2' }
-export function FetchArticles(uri){
+import {
+	Animated
+} from 'react-native';
 
-    return fetch(uri)
-        .then((response) => response.json())
-        .then((responseJson) => {
-            console.log('Event: ', responseJson.data);
-            return responseJson.data;
-        })
-        .catch((error) => {
-            //console.error(error);
-        });
+export function FetchArticles(uri, object){
+
+	fetch(uri)
+	.then(function(response){ return response.json(); })
+	.then(function(json){
+		object.loading = false;
+		object.setState({
+			fadeAnim: new Animated.Value(0),
+			articles: json.articles
+		});
+		Animated.timing(
+			object.state.fadeAnim,
+			{ toValue: 1 }
+		).start();
+	})
+	.catch(function(error) {
+		console.log('There has been a problem with your fetch operation: ' + error.message);
+		throw error;
+	});
 
 }

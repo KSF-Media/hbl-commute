@@ -4,11 +4,29 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	Dimensions
+	Dimensions,
+	Animated
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 class TransportationInfoView extends Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			fadeAnim: new Animated.Value(0)
+		};
+	}
+
+	componentDidMount() {
+		Animated.timing(
+			this.state.fadeAnim,
+			{
+				toValue: 1,
+				delay: 1000
+			}
+		).start();
+	}
 
 	render() {
 		return (
@@ -18,42 +36,42 @@ class TransportationInfoView extends Component {
 						animation={ slideRightAnimation(0) }
 						easing="linear"
 						duration={ (60 * 1000) }
-						style={ [styles.transportationInfoVehicle, styles.transportationInfoTrain, { left: 0 }] }>
+						style={ [styles.transportationInfoVehicle, styles.transportationInfoTrain, { left: 0 }, { opacity: this.state.fadeAnim }] }>
 						<Text style={ styles.transportationInfoText }>P</Text>
 					</Animatable.View>
 					<Animatable.View
 						animation={ slideRightAnimation(20) }
 						easing="linear"
 						duration={ (60 * 1000) }
-						style={ [styles.transportationInfoVehicle, styles.transportationInfoTram, { left: 20 }] }>
+						style={ [styles.transportationInfoVehicle, styles.transportationInfoTram, { left: 20 }, { opacity: this.state.fadeAnim }] }>
 						<Text style={ styles.transportationInfoText }>6T</Text>
 					</Animatable.View>
 					<Animatable.View
 						animation={ slideRightAnimation(30) }
 						easing="linear"
 						duration={ (60 * 1000) }
-						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 30 }] }>
+						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 30 }, { opacity: this.state.fadeAnim }] }>
 						<Text style={ styles.transportationInfoText }>42</Text>
 					</Animatable.View>
 					<Animatable.View
 						animation={ slideRightAnimation(45) }
 						easing="linear"
 						duration={ (60 * 1000) }
-						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 45 }] }>
+						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 45 }, { opacity: this.state.fadeAnim }] }>
 						<Text style={ styles.transportationInfoText }>54</Text>
 					</Animatable.View>
 					<Animatable.View
 						animation={ slideRightAnimation(100) }
 						easing="linear"
 						duration={ (60 * 1000) }
-						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 100 }] }>
+						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 100 }, { opacity: this.state.fadeAnim }] }>
 						<Text style={ styles.transportationInfoText }>785B</Text>
 					</Animatable.View>
 					<Animatable.View
 						animation={ slideRightAnimation(120) }
 						easing="linear"
 						duration={ (60 * 1000) }
-						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 120 }] }>
+						style={ [styles.transportationInfoVehicle, styles.transportationInfoBus, { left: 120 }, { opacity: this.state.fadeAnim }] }>
 						<Text style={ styles.transportationInfoText }>785B</Text>
 					</Animatable.View>
 				</View>

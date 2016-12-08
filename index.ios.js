@@ -35,7 +35,6 @@ export default class HBLCommute extends Component {
 		return (
 			<Navigator
 				initialRoute={ routes[0] }
-				initialRouteStack={ routes }
 				renderScene={ (route, navigator) => this.screenToRender(route, navigator) }
 			/>
 		);

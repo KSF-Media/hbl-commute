@@ -17,7 +17,9 @@ import NavigationBarWrapper from './app/components/NavigationBarWrapper'
 import ScrollViewContainer from './app/components/ScrollViewContainer';
 import ArticlesSwipeListView from './app/components/ArticlesSwipeListView';
 import TransportationInfoView from './app/components/TransportationInfoView';
+import ModalWrapper from './app/components/ModalWrapper';
 import * as GLOBAL from './app/Globals';
+import {TriggerEvent} from './app/helpers/Events';
 
 
 export default class HBLCommute extends Component {
@@ -35,6 +37,7 @@ export default class HBLCommute extends Component {
 			{ id: 5, title: "Många döda i brand på lyxhotell i Pakistan", caption: "Minst elva personer omkom och 75 skadades i en brand på ett fyrstjärnigt hotell lorem ipsum dolor sit amet.", imageUrl: 'https://doeho6k8shw5z.cloudfront.net/imengine/image.php?uuid=cbe27d56-d36b-4978-879e-5719c6636b5c&type=preview&source=cbe27d56-d36b-4978-879e-5719c6636b5c&function=hardcrop&width=1376&height=902&q=80', content: lorem_ipsum }
 		];
 	}
+
 
 	render() {
 		var titleConfig = {

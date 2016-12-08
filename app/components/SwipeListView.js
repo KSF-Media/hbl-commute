@@ -125,6 +125,8 @@ class SwipeListView extends Component {
 				ref={ c => this.setRefs(c) }
 				onScroll={ e => this.onScroll(e) }
 				renderRow={(rowData, secId, rowId) => this.renderRow(rowData, secId, rowId, this._rows)}
+				initialListSize={ 10 }
+				removeClippedSubviews={ false }
 			/>
 		)
 	}

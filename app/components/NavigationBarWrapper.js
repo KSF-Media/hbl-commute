@@ -10,6 +10,7 @@ class NavigationBarWrapper extends Component {
 
 		var titleConfig = this.props.title || {};
 		titleConfig.tintColor = "white";
+		titleConfig.style = { fontWeight: 'bold', fontSize: 20 }
 
 		var leftButtonConfig = {};
 		if(this.props.leftButton) {

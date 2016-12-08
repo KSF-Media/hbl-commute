@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
 	StyleSheet,
 	View,
+	TextInput,
 	Animated
 } from 'react-native';
 import NavigationBarWrapper from '../components/NavigationBarWrapper'
@@ -20,7 +21,8 @@ export default class MyListView extends Component {
 		this.props = props;
 		this.loading = true;
 		this.state = {
-			articles: []
+			articles: [],
+			badgeCount: 0
 		};
 	}
 
@@ -55,9 +57,10 @@ export default class MyListView extends Component {
 
 			return (
 				<View style={ styles.myListView }>
+					<TextInput style={ [styles.badge, styles.badge_hidden]  } ref={ component => this._badge = component } />
 					<NavigationBarWrapper leftButton={ leftButtonConfig } rightButton={ rightButtonConfig }/>
 					<Animated.View style={{ opacity: this.state.fadeAnim }}>
-						<ArticlesSwipeListView articles={ this.state.articles } title="Min lista" useStarIcon={ true }></ArticlesSwipeListView>
+						<ArticlesSwipeListView articles={ this.state.articles } title="Min lista" useStarIcon={ true } parent={ this }></ArticlesSwipeListView>
 					</Animated.View>
 					<TransportationInfoView/>
 				</View>
@@ -71,6 +74,13 @@ const styles = StyleSheet.create({
 	myListView: {
 		flex: 1,
 		backgroundColor: GLOBAL.COLOR.GREY_BACKGROUND
+	},
+
+	badge: GLOBAL.STYLE.BADGE,
+
+	badge_hidden: {
+		height: 0,
+		width: 0
 	}
 
 });

@@ -17,6 +17,24 @@ module.exports = {
 		HIGHLIGHT: '#f07e26'
 	},
 
+	STYLE: {
+		BADGE: {
+			position: 'absolute',
+			top: 23,
+			right: 1,
+			zIndex: 10,
+			height: 16,
+			width: 16,
+			lineHeight: 16,
+			fontSize: 12,
+			textAlign: 'center',
+			color: 'white',
+			backgroundColor: '#333',
+			borderRadius: 8,
+			overflow: 'hidden'
+		}
+	},
+
 	SIZE: {
 		ARTICLE_ITEM_HEIGHT: 70
 	},

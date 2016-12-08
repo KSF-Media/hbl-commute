@@ -34,12 +34,12 @@ export default class ArticlesSwipeListView extends Component {
 
 	onRowDeleteLeft(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleDeleted', Uuid:'Test' });
+		TriggerEvent({ Event:'articleDeleted', Uuid:'Test', deviceInfo:GLOBAL.deviceInfo });
 	}
 
 	onRowDeleteRight(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleSaved', Uuid:'Test' });
+		TriggerEvent({ Event:'articleSaved', Uuid:'Test', deviceInfo:GLOBAL.deviceInfo });
 	}
 
 	deleteRow(secId, rowId, rowMap) {

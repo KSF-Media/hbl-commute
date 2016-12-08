@@ -127,10 +127,6 @@ class SwipeRow extends Component {
 
 			let newDX = this.swipeInitialX + dx;
 
-			console.log("NewDX: " + newDX);
-			console.log("Left delete value: " + this.props.leftDeleteValue);
-			console.log("Right delete value: " + this.props.rightDeleteValue);
-
 			if (newDX >= this.props.leftDeleteValue && typeof this.props.onRowDeleteLeft === "function") {
 				this.parent.setState({ deletingLeft: true });
 				this.manuallySwipeRow(Dimensions.get('window').width);

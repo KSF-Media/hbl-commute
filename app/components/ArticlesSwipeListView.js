@@ -57,7 +57,7 @@ export default class ArticlesSwipeListView extends Component {
 	articleRead(article) {
 		if(!this.isArticleRead(article)) {
 			var readArticles = this.state.readArticles;
-			readArticles[article.uuid] = article;
+			readArticles.push(article);
 			this.setState({
 				readArticles : readArticles
 			});

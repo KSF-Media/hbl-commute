@@ -57,7 +57,7 @@ export default class MyListView extends Component {
 				<View style={ styles.myListView }>
 					<NavigationBarWrapper leftButton={ leftButtonConfig } rightButton={ rightButtonConfig }/>
 					<Animated.View style={{ opacity: this.state.fadeAnim }}>
-						<ArticlesSwipeListView articles={ this.state.articles }></ArticlesSwipeListView>
+						<ArticlesSwipeListView articles={ this.state.articles } title="Min lista" useStarIcon={ true }></ArticlesSwipeListView>
 					</Animated.View>
 					<TransportationInfoView/>
 				</View>

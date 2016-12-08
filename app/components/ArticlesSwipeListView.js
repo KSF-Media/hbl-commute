@@ -12,6 +12,7 @@ import {
 	Navigator
 } from 'react-native';
 import SwipeListView from './SwipeListView';
+import ScrollViewContainer from './ScrollViewContainer';
 import ModalWrapper from './ModalWrapper';
 import * as GLOBAL from '../Globals';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -31,6 +32,7 @@ export default class ArticlesSwipeListView extends Component {
 
 	constructor(props) {
 		super(props);
+		this.positiveIcon = this.props.useStarIcon ? starIcon : heartIcon;
 		this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		this.state = {
 			basic: true,
@@ -99,7 +101,7 @@ export default class ArticlesSwipeListView extends Component {
 				underlayColor={ GLOBAL.COLOR.GREY_BACKGROUND }>
 				<View style={ styles.articleVisibleRow }>
 					<View style={ [styles.articleReadIndicator, (this.isArticleRead(article) ? styles.articleReadIndicatorRead : '' )] }></View>
-					<Text style={ styles.articleTitle }>{ article.title }</Text>
+					<Text style={ [styles.articleTitle, (article.title.length > 65 ? styles.articleTitleSmall : false)] }>{ article.title }</Text>
 					<View style={ styles.articleMainTagAndPublishedAt }>
 						<Text style={ styles.articleMainTag }>{ (article.mainTag ? article.mainTag.toUpperCase() : false) }</Text>
 						<Text style={ styles.articlePublishedAt }>{ this.timestampToHoursAndMinutes(article.publishedAt) }</Text>
@@ -112,7 +114,7 @@ export default class ArticlesSwipeListView extends Component {
 	_renderHiddenRow() {
 		return (
 			<View style={ styles.articleBack }>
-				<Text>{ heartIcon }</Text>
+				<Text>{ this.positiveIcon }</Text>
 				<Text>{ timesIcon }</Text>
 			</View>
 		)
@@ -121,21 +123,26 @@ export default class ArticlesSwipeListView extends Component {
 	render() {
 		return (
 			<View style={ styles.container }>
-
-				<SwipeListView
-					dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-					renderRow={
-						article => this._renderVisibleRow(article)
+				<ScrollViewContainer>
+					{
+						this.props.title ? <Text style={ styles.containerTitle }>{ this.props.title }</Text> : false
 					}
-					renderHiddenRow={
-						article => this._renderHiddenRow()
-					}
-					parent = { this }
-					onRowDeleteLeft={ this.onRowDeleteLeft }
-					onRowDeleteRight={ this.onRowDeleteRight }
-					leftDeleteValue={ 75 }
-					rightDeleteValue={ -75 }
-				/>
+					<SwipeListView
+						style={ styles.swipeListViewContainer }
+						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
+						renderRow={
+							article => this._renderVisibleRow(article)
+						}
+						renderHiddenRow={
+							article => this._renderHiddenRow()
+						}
+						parent = { this }
+						onRowDeleteLeft={ this.onRowDeleteLeft }
+						onRowDeleteRight={ this.onRowDeleteRight }
+						leftDeleteValue={ 75 }
+						rightDeleteValue={ -75 }
+					/>
+				</ScrollViewContainer>
 			</View>
 		);
 	}
@@ -145,8 +152,21 @@ export default class ArticlesSwipeListView extends Component {
 const styles = StyleSheet.create({
 
 	container: {
-		marginTop: 30,
-		marginBottom: 10
+
+	},
+
+	swipeListViewContainer: {
+		marginTop: 35,
+		marginBottom: 75
+	},
+
+	containerTitle: {
+		paddingTop: 50,
+		marginBottom: -28,
+		fontSize: 24,
+		color: '#333333',
+		textAlign: 'center',
+		fontWeight: '600'
 	},
 
 	articleFront: {
@@ -192,6 +212,10 @@ const styles = StyleSheet.create({
 		letterSpacing: 0,
 		padding: 10,
 		paddingLeft: 40,
+	},
+
+	articleTitleSmall: {
+		fontSize: 14
 	},
 
 	articleMainTagAndPublishedAt: {

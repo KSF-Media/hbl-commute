@@ -14,7 +14,7 @@ module.exports = {
 		GREY_BACKGROUND: '#f7f5f3',
 		NEGATIVE: 'red',
 		POSITIVE: 'green',
-		HIGHLIGHT: 'yellow'
+		HIGHLIGHT: '#f07e26'
 	},
 
 	SIZE: {

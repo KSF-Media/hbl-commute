@@ -1,3 +1,5 @@
+import DeviceInfo from 'react-native-device-info';
+
 module.exports = {
 
 	COLOR: {
@@ -11,6 +13,17 @@ module.exports = {
 
 	SIZE: {
 		ARTICLE_ITEM_HEIGHT: 70
+	},
+	deviceInfo:{
+		deviceUID: DeviceInfo.getUniqueID(),
+		deviceMaker: DeviceInfo.getManufacturer(),
+		deviceBrand: DeviceInfo.getBrand(),
+		deviceModel: DeviceInfo.getModel(),
+		deviceID: DeviceInfo.getDeviceId(),
+		deviceSysName: DeviceInfo.getSystemName(),
+		deviceName: DeviceInfo.getDeviceName(),
+		deviceUserAgent: DeviceInfo.getUserAgent(),
+		deviceCountry: DeviceInfo.getDeviceCountry()
 	}
 
 };

@@ -139,6 +139,7 @@ export default class ArticlesSwipeListView extends Component {
 const styles = StyleSheet.create({
 
 	container: {
+		marginTop: 30,
 		marginBottom: 10
 	},
 

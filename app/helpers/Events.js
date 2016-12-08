@@ -1,5 +1,3 @@
-import React, {Component} from 'react';
-
 // params is some object { param1: 'value1', param2: 'value2' }
 export function TriggerEvent(params){
 

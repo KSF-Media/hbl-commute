@@ -1,6 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import NavigationBar from 'react-native-navbar';
+import * as GLOBAL from '../Globals';
 
 class NavigationBarWrapper extends Component {
 	render() {
@@ -28,7 +29,7 @@ class NavigationBarWrapper extends Component {
 
 		return (
 			<NavigationBar
-				tintColor="#f07e26"
+				tintColor={ GLOBAL.COLOR.HBL_HEADER }
 				statusBar={ statusBarStyle }
 				title={ titleConfig }
 				leftButton={ leftButtonConfig }

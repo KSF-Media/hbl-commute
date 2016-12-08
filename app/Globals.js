@@ -2,6 +2,12 @@ import DeviceInfo from 'react-native-device-info';
 
 module.exports = {
 
+	ROUTES: [
+		{ id: 'main', title: 'Main', index: 0 },
+		{ id: 'my-list', title: 'My List', index: 1 },
+		{ id: 'archive', title: 'Archive', index: 2 },
+	],
+
 	COLOR: {
 		HBL_HEADER: '#f07e26',
 		GREY_HEADER: '#8f867e',

@@ -8,7 +8,7 @@ class NavigationBarWrapper extends Component {
 
 		var statusBarStyle = { style: "light-content" };
 
-		var titleConfig = this.props.title || {};
+		var titleConfig = this.props.title || { title: "HBL" };
 		titleConfig.tintColor = "white";
 		titleConfig.style = { fontWeight: 'bold', fontSize: 20 }
 
@@ -25,7 +25,7 @@ class NavigationBarWrapper extends Component {
 			rightButtonConfig = this.props.rightButton;
 			rightButtonConfig.tintColor = "white";
 		} else {
-			leftButtonConfig.title = "";
+			rightButtonConfig.title = "";
 		}
 
 		return (

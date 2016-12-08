@@ -22,14 +22,16 @@ module.exports = {
 	},
 	deviceInfo:{
 		deviceUID: DeviceInfo.getUniqueID(),
-		deviceMaker: DeviceInfo.getManufacturer(),
-		deviceBrand: DeviceInfo.getBrand(),
-		deviceModel: DeviceInfo.getModel(),
-		deviceID: DeviceInfo.getDeviceId(),
-		deviceSysName: DeviceInfo.getSystemName(),
-		deviceName: DeviceInfo.getDeviceName(),
-		deviceUserAgent: DeviceInfo.getUserAgent(),
-		deviceCountry: DeviceInfo.getDeviceCountry()
+		deviceDetails:{
+			deviceMaker: DeviceInfo.getManufacturer(),
+			deviceBrand: DeviceInfo.getBrand(),
+			deviceModel: DeviceInfo.getModel(),
+			deviceID: DeviceInfo.getDeviceId(),
+			deviceSysName: DeviceInfo.getSystemName(),
+			deviceName: DeviceInfo.getDeviceName(),
+			deviceUserAgent: DeviceInfo.getUserAgent(),
+			deviceCountry: DeviceInfo.getDeviceCountry()
+		}
 	}
 
 };

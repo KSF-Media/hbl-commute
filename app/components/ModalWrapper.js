@@ -5,14 +5,15 @@ import {
     StyleSheet,
     Dimensions,
     TouchableHighlight,
-    Modal,
+//    Modal,
 } from 'react-native';
 
 export default class ModalWrapper extends Component{
 
     state = {
-        modalVisible: true,
+        modalVisible: this.props.modalVisible
     }
+
 
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
@@ -20,26 +21,24 @@ export default class ModalWrapper extends Component{
 
     render(){
         return(
-            <Modal style={styles.ModalWindow}
-                animationType={"fade"}
-                transparent={true}
-                visible={this.state.modalVisible}
-                onRequestClose={() => {alert("Modal has been closed.")}}>
+            <View style={styles.ModalWindow}>
                 <View id="article-wrapper" style={styles.ModalWrapper}>
                     <TouchableHighlight onPress={() => {
-                        this.setModalVisible(!this.state.modalVisible)
+                        this.context.onCloseModal();
                     }}>
                         <View><Text>close button</Text></View>
                     </TouchableHighlight>
-                    <Text>Test</Text>
+                    <Text style={styles.articleTitle}>test</Text>
                 </View>
-            </Modal>
+            </View>
         );
     }
 
+
     _modalClose(){
-        alert('closing modal');
-        this.setState({ modalVisible:false });
+        () => {
+            this.props.hideFunction();
+        };
     }
 
 
@@ -62,4 +61,12 @@ const styles = StyleSheet.create({
         height:modalHeight,
         width:modalWidth,
     },
+    articleTitle: {
+		fontFamily: 'Merriweather',
+		fontSize: 16,
+		letterSpacing: 0,
+		padding: 10,
+		marginLeft: 20
+	},
+
 });

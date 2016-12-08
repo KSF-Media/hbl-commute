@@ -7,9 +7,11 @@ import {
 	Text,
 	TouchableOpacity,
 	TouchableHighlight,
-	View
+	View,
+	Modal
 } from 'react-native';
 import SwipeListView from './SwipeListView';
+import ModalWrapper from './ModalWrapper';
 import * as GLOBAL from '../Globals';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {TriggerEvent} from '../helpers/Events';
@@ -34,12 +36,12 @@ export default class ArticlesSwipeListView extends Component {
 
 	onRowDeleteLeft(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleDeleted', Uuid:'Test', deviceInfo:GLOBAL.deviceInfo });
+		TriggerEvent({ Event:'articleDeleted', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID });
 	}
 
 	onRowDeleteRight(secId, rowId, rowMap) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleSaved', Uuid:'Test', deviceInfo:GLOBAL.deviceInfo });
+		TriggerEvent({ Event:'articleSaved', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID });
 	}
 
 	deleteRow(secId, rowId, rowMap) {
@@ -64,6 +66,7 @@ export default class ArticlesSwipeListView extends Component {
 				readArticles : readArticles
 			});
 		}
+
 	}
 
 	isArticleRead(article) {
@@ -119,6 +122,7 @@ export default class ArticlesSwipeListView extends Component {
 	render() {
 		return (
 			<View style={ styles.container }>
+
 				<SwipeListView
 					dataSource={this.ds.cloneWithRows(this.state.listViewData)}
 					renderRow={

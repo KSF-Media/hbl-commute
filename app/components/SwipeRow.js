@@ -127,14 +127,11 @@ class SwipeRow extends Component {
 
 			let newDX = this.swipeInitialX + dx;
 
-			if (newDX >= this.props.leftDeleteValue && typeof this.props.onRowDeleteLeft === "function") {
-				this.parent.setState({ deletingLeft: true });
-				this.manuallySwipeRow(Dimensions.get('window').width);
-			} else if (newDX <= this.props.rightDeleteValue && typeof this.props.onRowDeleteRight === "function") {
-				this.parent.setState({ deletingRight: true });
-				this.manuallySwipeRow(Dimensions.get('window').width * -1);
+			if (newDX >= this.props.leftDeleteValue) {
+				return false;
+			} else if (newDX <= this.props.rightDeleteValue) {
+				return false;
 			} else {
-				this.parent.setState({ deletingLeft: false, deletingRight: false });
 				if (this.props.disableLeftSwipe  && newDX < 0) { newDX = 0; }
 				if (this.props.disableRightSwipe && newDX > 0) { newDX = 0; }
 
@@ -176,9 +173,9 @@ class SwipeRow extends Component {
 			}
 		}
 
-		if (this.state.translateX._value >= this.props.leftDeleteValue && typeof this.props.onRowDeleteLeft === "function") {
+		if (this.state.translateX._value >= this.props.leftDeleteValue - 20) {
 			this.props.onRowDeleteLeft();
-		} else if(this.state.translateX._value <= this.props.rightDeleteValue && typeof this.props.onRowDeleteRight === "function") {
+		} else if(this.state.translateX._value <= this.props.rightDeleteValue + 20) {
 			this.props.onRowDeleteRight();
 		} else {
 			this.manuallySwipeRow(toValue);
@@ -298,7 +295,8 @@ class SwipeRow extends Component {
 
 	render() {
 		return (
-			<Animated.View style={[
+			<Animated.View
+				style={[
 					this.props.style ? this.props.style : styles.container,
 					{
 			            height: this.state.height

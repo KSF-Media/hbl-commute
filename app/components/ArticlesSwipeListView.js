@@ -28,9 +28,7 @@ export default class ArticlesSwipeListView extends Component {
 		this.state = {
 			basic: true,
 			listViewData: this.props.articles,
-			deletingLeft: false,
-			deletingRight: false,
-			readArticles: []
+			readArticles: global.readArticles || []
 		};
 	}
 
@@ -48,23 +46,22 @@ export default class ArticlesSwipeListView extends Component {
 		const newData = [...this.state.listViewData];
 		var row = rowMap[`${secId}${rowId}`],
 			self = this;
-		setTimeout(function() {
-			row.animateUpHiddenRow();
-			setTimeout(function(){
-				row.resetRow();
-				newData.push(newData[0]); // ToDo: Push new item, not the first of the list
-				self.setState({ listViewData: newData });
-			}, 300);
+		row.animateUpHiddenRow();
+		setTimeout(function(){
+			row.resetRow();
+			newData.push(newData[0]); // ToDo: Push new item, not the first of the list
+			self.setState({ listViewData: newData });
 		}, 300);
 	}
 
 	articleRead(article) {
 		if(!this.isArticleRead(article)) {
 			var readArticles = this.state.readArticles;
-			readArticles[article.id] = article;
+			readArticles[article.uuid] = article;
 			this.setState({
 				readArticles : readArticles
 			});
+			global.readArticles = readArticles;
 		}
 
 	}
@@ -72,12 +69,17 @@ export default class ArticlesSwipeListView extends Component {
 	isArticleRead(article) {
 		var isRead = false;
 		this.state.readArticles.map(function(object) {
-			if(object.id === article.id) {
+			if(object.uuid === article.uuid) {
 				isRead = true;
 				return false;
 			}
 		});
 		return isRead;
+	}
+
+	timestampToHoursAndMinutes(timestamp) {
+		var t = new Date(timestamp);
+		return t.getHours() + ":" + t.getMinutes();
 	}
 
 	_renderVisibleRow(article) {
@@ -86,37 +88,25 @@ export default class ArticlesSwipeListView extends Component {
 				onPress={ _ => this.articleRead(article) }
 				style={ styles.articleFront }
 				underlayColor={ GLOBAL.COLOR.GREY_BACKGROUND }>
-				<View>
+				<View style={ styles.articleVisibleRow }>
 					<View style={ [styles.articleReadIndicator, (this.isArticleRead(article) ? styles.articleReadIndicatorRead : '' )] }></View>
-					<Text style={ styles.articleTitle }>{article.title}</Text>
+					<Text style={ styles.articleTitle }>{ article.title }</Text>
+					<View style={ styles.articleMainTagAndPublishedAt }>
+						<Text style={ styles.articleMainTag }>{ article.mainTag.toUpperCase() }</Text>
+						<Text style={ styles.articlePublishedAt }>{ this.timestampToHoursAndMinutes(article.publishedAt) }</Text>
+					</View>
 				</View>
 			</TouchableHighlight>
 		)
 	}
 
 	_renderHiddenRow() {
-		if(this.state.deletingLeft) {
-			return (
-				<View style={ styles.articleBack }>
-					<Text>{ heartIcon }</Text>
-					<Text></Text>
-				</View>
-			)
-		} else if(this.state.deletingRight) {
-			return (
-				<View style={ styles.articleBack }>
-					<Text></Text>
-					<Text>{ timesIcon }</Text>
-				</View>
-			)
-		} else {
-			return (
-				<View style={ styles.articleBack }>
-					<Text>{ heartIcon }</Text>
-					<Text>{ timesIcon }</Text>
-				</View>
-			)
-		}
+		return (
+			<View style={ styles.articleBack }>
+				<Text>{ heartIcon }</Text>
+				<Text>{ timesIcon }</Text>
+			</View>
+		)
 	}
 
 	render() {
@@ -151,35 +141,72 @@ const styles = StyleSheet.create({
 	},
 
 	articleFront: {
-		backgroundColor: 'white',
 		height: GLOBAL.SIZE.ARTICLE_ITEM_HEIGHT,
-		borderColor: GLOBAL.COLOR.GREY_BACKGROUND,
-		margin: 10,
-		borderRadius: 4,
+		padding: 10,
+		paddingBottom: 0
 	},
 
 	articleReadIndicator: {
-		height: 10,
-		width: 10,
+		height: 12,
+		width: 12,
 		backgroundColor: '#3569d2',
 		position: 'absolute',
-		top: GLOBAL.SIZE.ARTICLE_ITEM_HEIGHT / 2 - 10,
-		left: 10,
-		borderRadius: 10
+		top: 23,
+		left: 15,
+		borderRadius: 12,
+		zIndex: 10
 	},
 
 	articleReadIndicatorRead: {
-		borderWidth: 2,
-		borderColor: GLOBAL.COLOR.GREY_BACKGROUND,
-		backgroundColor: 'white'
+		borderWidth: 1,
+		borderColor: '#3569d2',
+		backgroundColor: 'white',
+	},
+
+	articleVisibleRow: {
+		backgroundColor: 'white',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		shadowColor: "#000000",
+		shadowOpacity: 0.1,
+		shadowRadius: 4,
+		shadowOffset: {
+			height: 2,
+			width: 0
+		}
 	},
 
 	articleTitle: {
-		fontFamily: 'Merriweather',
+		flex: 3,
+		fontFamily: 'Roboto',
 		fontSize: 16,
 		letterSpacing: 0,
 		padding: 10,
-		marginLeft: 20
+		paddingLeft: 40,
+	},
+
+	articleMainTagAndPublishedAt: {
+		flex: 0,
+		margin: 10,
+		marginTop: 15
+	},
+
+	articleMainTag: {
+		backgroundColor: '#333333',
+		color: 'white',
+		textAlign: 'center',
+		fontSize: 10,
+		padding: 2,
+		paddingLeft: 5,
+		paddingRight: 5,
+		marginBottom: 5,
+		fontWeight: '500',
+	},
+
+	articlePublishedAt: {
+		color: '#333333',
+		textAlign: 'right',
+		fontSize: 10
 	},
 
 	articleBack: {
@@ -188,7 +215,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		padding: 20
+		padding: 20,
+		paddingTop: 30,
+		borderRadius: 4,
 	}
 
 });

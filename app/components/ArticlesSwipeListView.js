@@ -26,7 +26,8 @@ export default class ArticlesSwipeListView extends Component {
 			basic: true,
 			listViewData: this.props.articles,
 			deletingLeft: false,
-			deletingRight: false
+			deletingRight: false,
+			readArticles: []
 		};
 	}
 
@@ -52,13 +53,35 @@ export default class ArticlesSwipeListView extends Component {
 		}, 300);
 	}
 
+	articleRead(article) {
+		if(!this.isArticleRead(article)) {
+			var readArticles = this.state.readArticles;
+			readArticles[article.id] = article;
+			this.setState({
+				readArticles : readArticles
+			});
+		}
+	}
+
+	isArticleRead(article) {
+		var isRead = false;
+		this.state.readArticles.map(function(object) {
+			if(object.id === article.id) {
+				isRead = true;
+				return false;
+			}
+		});
+		return isRead;
+	}
+
 	_renderVisibleRow(article) {
 		return (
 			<TouchableHighlight
-				onPress={ _ => console.log(article) }
+				onPress={ _ => this.articleRead(article) }
 				style={ styles.articleFront }
 				underlayColor={ GLOBAL.COLOR.GREY_BACKGROUND }>
 				<View>
+					<View style={ [styles.articleReadIndicator, (this.isArticleRead(article) ? styles.articleReadIndicatorRead : '' )] }></View>
 					<Text style={ styles.articleTitle }>{article.title}</Text>
 				</View>
 			</TouchableHighlight>
@@ -66,8 +89,6 @@ export default class ArticlesSwipeListView extends Component {
 	}
 
 	_renderHiddenRow() {
-		console.log("DELETING LEFT: " + this.state.deletingLeft);
-		console.log("DELETING RIGHT: " + this.state.deletingRight);
 		if(this.state.deletingLeft) {
 			return (
 				<View style={ styles.articleBack }>
@@ -129,11 +150,28 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 	},
 
+	articleReadIndicator: {
+		height: 10,
+		width: 10,
+		backgroundColor: '#3569d2',
+		position: 'absolute',
+		top: GLOBAL.SIZE.ARTICLE_ITEM_HEIGHT / 2 - 10,
+		left: 10,
+		borderRadius: 10
+	},
+
+	articleReadIndicatorRead: {
+		borderWidth: 2,
+		borderColor: GLOBAL.COLOR.GREY_BACKGROUND,
+		backgroundColor: 'white'
+	},
+
 	articleTitle: {
 		fontFamily: 'Merriweather',
 		fontSize: 16,
 		letterSpacing: 0,
-		padding: 10
+		padding: 10,
+		marginLeft: 20
 	},
 
 	articleBack: {

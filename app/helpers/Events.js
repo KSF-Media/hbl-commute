@@ -18,7 +18,7 @@ export function TriggerEvent(params){
     console.log('Send event: ', eventObject);
     //alert('Event fired');
 
-    fetch('https://rvfa2fac83.execute-api.eu-central-1.amazonaws.com/prod/insertAppData', {
+    fetch('https://rvfa2fac83.execute-api.eu-central-1.amazonaws.com/prod/eventLogger', {
         method: 'POST',
         headers: {
             //'Accept': 'application/x-www-form-urlencoded',

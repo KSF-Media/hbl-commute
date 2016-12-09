@@ -145,7 +145,7 @@ export default class ArticlesSwipeListView extends Component {
 	render() {
 		if(this.state.currentArticle != null) {
 			return (
-				<ArticlesTinderView articles={ [this.state.currentArticle] } parent={ this } />
+				<ArticlesTinderView articles={ [this.state.currentArticle] } parent={ this } useStarIcon={ this.props.useStarIcon } />
 			)
 		} else {
 			return (

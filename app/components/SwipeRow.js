@@ -173,9 +173,9 @@ class SwipeRow extends Component {
 			}
 		}
 
-		if (this.state.translateX._value >= this.props.leftDeleteValue - 40) {
+		if (this.state.translateX._value >= this.props.leftDeleteValue - 40 && this.props.leftDeleteValue != 0) {
 			this.props.onRowDeleteLeft();
-		} else if(this.state.translateX._value <= this.props.rightDeleteValue + 40) {
+		} else if(this.state.translateX._value <= this.props.rightDeleteValue + 40 && this.props.leftDeleteValue != 0) {
 			this.props.onRowDeleteRight();
 		} else {
 			this.manuallySwipeRow(toValue);

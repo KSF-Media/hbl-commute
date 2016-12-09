@@ -48,7 +48,11 @@ export default class MainView extends Component {
 				<Animated.View style={ [styles.mainView, { opacity: this.state.fadeAnim }] }>
 					<TextInput style={ [styles.badge, styles.badge_hidden]  } ref={ component => this._badge = component } />
 					<NavigationBarWrapper rightButton={ rightButtonConfig } />
-					<ArticlesSwipeListView articles={ this.state.articles } parent={ this }></ArticlesSwipeListView>
+					<ArticlesSwipeListView
+						articles={ this.state.articles }
+						parent={ this }
+						leftDeleteValue={ 75 }
+						rightDeleteValue={ -75 }></ArticlesSwipeListView>
 					<TransportationInfoView/>
 				</Animated.View>
 			);

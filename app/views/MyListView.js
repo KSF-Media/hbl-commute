@@ -59,8 +59,14 @@ export default class MyListView extends Component {
 				<View style={ styles.myListView }>
 					<TextInput style={ [styles.badge, styles.badge_hidden]  } ref={ component => this._badge = component } />
 					<NavigationBarWrapper leftButton={ leftButtonConfig } rightButton={ rightButtonConfig }/>
-					<Animated.View style={{ opacity: this.state.fadeAnim }}>
-						<ArticlesSwipeListView articles={ this.state.articles } title="Min lista" useStarIcon={ true } parent={ this }></ArticlesSwipeListView>
+					<Animated.View style={{ opacity: this.state.fadeAnim, flex: 1 }}>
+						<ArticlesSwipeListView
+							articles={ this.state.articles }
+							title="Min lista"
+							useStarIcon={ true }
+							parent={ this }
+							leftDeleteValue={ 75 }
+							rightDeleteValue={ -75 }></ArticlesSwipeListView>
 					</Animated.View>
 					<TransportationInfoView/>
 				</View>

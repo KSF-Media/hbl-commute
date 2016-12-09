@@ -9,24 +9,20 @@ import {
 	TouchableHighlight,
 	View,
 	Modal,
-	Navigator
+	Navigator,
+	Animated
 } from 'react-native';
 import SwipeListView from './SwipeListView';
 import ScrollViewContainer from './ScrollViewContainer';
-import ModalWrapper from './ModalWrapper';
+import ArticlesTinderView from './ArticlesTinderView';
 import * as GLOBAL from '../Globals';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {TriggerEvent} from '../helpers/Events';
+import { TriggerEvent } from '../helpers/Events';
+import { TimestampToHoursAndMinutes } from '../helpers/Functions';
 
 const heartIcon = (<Icon name="heart" size={ 30 } color={ GLOBAL.COLOR.POSITIVE } />);
 const timesIcon = (<Icon name="times" size={ 30 } color={ GLOBAL.COLOR.NEGATIVE } />);
 const starIcon = (<Icon name="star" size={ 30 } color={ GLOBAL.COLOR.HIGHLIGHT } />);
-
-var Routes = {
-	modal: {
-	component: ModalWrapper
-	}
-}
 
 export default class ArticlesSwipeListView extends Component {
 
@@ -37,13 +33,15 @@ export default class ArticlesSwipeListView extends Component {
 		this.state = {
 			basic: true,
 			listViewData: this.props.articles,
-			readArticles: global.readArticles || []
+			readArticles: global.readArticles || [],
+			currentArticle: null,
+			fadeAnim: new Animated.Value(1)
 		};
 	}
 
-	onRowDeleteLeft(secId, rowId, rowMap) {
+	onRowDeleteLeft(secId, rowId, rowMap, uuid) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleSaved', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
+		TriggerEvent({ Event:'articleSaved', Uuid: uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
 		if(this.props.parent._badge) {
 			this.props.parent.state.badgeCount++;
 			this.props.parent._badge.setNativeProps({
@@ -53,38 +51,61 @@ export default class ArticlesSwipeListView extends Component {
 		}
 	}
 
-	onRowDeleteRight(secId, rowId, rowMap) {
+	onRowDeleteRight(secId, rowId, rowMap, uuid) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleDeleted', Uuid:'Test', deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
+		TriggerEvent({ Event:'articleDeleted', Uuid: uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
 	}
 
 	deleteRow(secId, rowId, rowMap) {
 		const newData = [...this.state.listViewData];
-		var row = rowMap[`${secId}${rowId}`],
-			self = this;
-		row.animateUpHiddenRow();
-		setTimeout(function(){
-			row.resetRow();
-			newData.push(newData[0]); // ToDo: Push new item, not the first of the list
-			self.setState({ listViewData: newData });
-		}, 300);
+		var self = this;
+		if(rowMap) {
+			var row = rowMap[`${secId}${rowId}`];
+
+			row.animateUpHiddenRow();
+			setTimeout(function(){
+				row.resetRow();
+				newData.push(newData[0]); // ToDo: Push new item, not the first of the list
+				self.setState({
+					listViewData: newData,
+					currentArticle: null
+				});
+			}, 300);
+		} else {
+			this.setState({
+				currentArticle: null,
+				fadeAnim: new Animated.Value(0)
+			});
+			setTimeout(function(){
+				Animated.timing(
+					self.state.fadeAnim,
+					{ toValue: 1 }
+				).start();
+			}, 100);
+		}
 	}
 
-	articleRead(article) {
+	articleRead(article, secId, rowId) {
+		article.secId = secId;
+		article.rowId = rowId;
+		this.setState({
+			currentArticle: article
+		});
 		if(!this.isArticleRead(article)) {
 			var readArticles = this.state.readArticles;
 			readArticles.push(article);
 			this.setState({
-				readArticles : readArticles
+				readArticles: readArticles
 			});
 			global.readArticles = readArticles;
 		}
-
 	}
 
 	isArticleRead(article) {
 		var isRead = false;
 		this.state.readArticles.map(function(object) {
+			console.log(object.uuid);
+			console.log(article.uuid);
 			if(object.uuid === article.uuid) {
 				isRead = true;
 				return false;
@@ -93,17 +114,12 @@ export default class ArticlesSwipeListView extends Component {
 		return isRead;
 	}
 
-	timestampToHoursAndMinutes(timestamp) {
-		var t = new Date(timestamp),
-			hours = ('0' + t.getHours()).slice(-2),
-			minutes = ('0' + t.getMinutes()).slice(-2);
-		return hours + ":" + minutes;
-	}
-
-	_renderVisibleRow(article) {
+	_renderVisibleRow(article, secId, rowId) {
 		return (
 			<TouchableHighlight
-				onPress={ _ => this.articleRead(article) }
+				onPress={
+					_ => this.articleRead(article, secId, rowId)
+				}
 				style={ styles.articleFront }
 				underlayColor={ GLOBAL.COLOR.GREY_BACKGROUND }>
 				<View style={ styles.articleVisibleRow }>
@@ -111,7 +127,7 @@ export default class ArticlesSwipeListView extends Component {
 					<Text style={ [styles.articleTitle, (article.title.length > 65 ? styles.articleTitleSmall : false)] }>{ article.title }</Text>
 					<View style={ styles.articleMainTagAndPublishedAt }>
 						<Text style={ styles.articleMainTag }>{ (article.mainTag ? article.mainTag.toUpperCase() : false) }</Text>
-						<Text style={ styles.articlePublishedAt }>{ this.timestampToHoursAndMinutes(article.publishedAt) }</Text>
+						<Text style={ styles.articlePublishedAt }>{ TimestampToHoursAndMinutes(article.publishedAt) }</Text>
 					</View>
 				</View>
 			</TouchableHighlight>
@@ -128,30 +144,37 @@ export default class ArticlesSwipeListView extends Component {
 	}
 
 	render() {
-		return (
-			<View style={ styles.container }>
-				<ScrollViewContainer>
-					{
-						this.props.title ? <Text style={ styles.containerTitle }>{ this.props.title }</Text> : false
-					}
-					<SwipeListView
-						style={ styles.swipeListViewContainer }
-						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-						renderRow={
-							article => this._renderVisibleRow(article)
+		if(this.state.currentArticle != null) {
+			return (
+				<ArticlesTinderView articles={ [this.state.currentArticle] } parent={ this } />
+			)
+		} else {
+			return (
+				<Animated.View
+					style={ [styles.container, { opacity: this.state.fadeAnim }] }>
+					<ScrollViewContainer>
+						{
+							this.props.title ? <Text style={ styles.containerTitle }>{ this.props.title }</Text> : false
 						}
-						renderHiddenRow={
-							article => this._renderHiddenRow()
-						}
-						parent = { this }
-						onRowDeleteLeft={ this.onRowDeleteLeft }
-						onRowDeleteRight={ this.onRowDeleteRight }
-						leftDeleteValue={ 75 }
-						rightDeleteValue={ -75 }
-					/>
-				</ScrollViewContainer>
-			</View>
-		);
+						<SwipeListView
+							style={ styles.swipeListViewContainer }
+							dataSource={this.ds.cloneWithRows(this.state.listViewData)}
+							renderRow={
+								(article, secId, rowId) => this._renderVisibleRow(article, secId, rowId)
+							}
+							renderHiddenRow={
+								article => this._renderHiddenRow()
+							}
+							parent={ this }
+							onRowDeleteLeft={ this.onRowDeleteLeft }
+							onRowDeleteRight={ this.onRowDeleteRight }
+							leftDeleteValue={ this.props.leftDeleteValue }
+							rightDeleteValue={ this.props.rightDeleteValue }
+						/>
+					</ScrollViewContainer>
+				</Animated.View>
+			);
+		}
 	}
 
 }

@@ -49,9 +49,12 @@ export default class ArchiveView extends Component {
 			return (
 				<View style={ styles.archiveView }>
 					<NavigationBarWrapper leftButton={ leftButtonConfig }/>
-					<ScrollViewContainer>
-						<ArticlesSwipeListView articles={ this.state.articles } title="Mitt arkiv"></ArticlesSwipeListView>
-					</ScrollViewContainer>
+					<ArticlesSwipeListView
+						articles={ this.state.articles }
+						title="Mitt arkiv"
+						parent={ this }
+						leftDeleteValue={ 0 }
+						rightDeleteValue={ 0 }></ArticlesSwipeListView>
 					<TransportationInfoView/>
 				</View>
 			);

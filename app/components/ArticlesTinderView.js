@@ -4,7 +4,8 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	Dimensions
+	Dimensions,
+	Icon
 } from 'react-native';
 import SwipeCards from 'react-native-swipe-cards';
 import { TruncateString } from '../helpers/Functions';
@@ -41,6 +42,22 @@ export default class ArticlesTinderView extends Component {
 		)
 	}
 
+	_renderYupView() {
+		return (
+			<Text>
+				<Icon name={ this.props.useStarIcon ? 'star' : 'heart' } size={ 60 } color={ GLOBAL.COLOR.POSITIVE } />
+			</Text>
+		)
+	}
+
+	_renderNoView() {
+		return (
+			<Text>
+				<Icon name="star" size={ 60 } color={ GLOBAL.COLOR.HIGHLIGHT } />
+			</Text>
+		)
+	}
+
 	render() {
 		return (
 			<SwipeCards
@@ -49,6 +66,14 @@ export default class ArticlesTinderView extends Component {
 
 				renderCard={ (article) => this._renderCard(article) }
 				renderNoMoreCards={ () => this.closeView() }
+
+				yupStyle={ [styles.yup, ( this.props.useStarIcon ? styles.yupArchive : false )] }
+				yupTextStyle={ [styles.yupText, ( this.props.useStarIcon ? styles.yupArchiveText : false )] }
+				yupText={  this.props.useStarIcon ? "Arkivera" : "Gilla" }
+
+				nopeStyle={ [styles.nope] }
+				nopeTextStyle={ [styles.nopeText] }
+				noText={ "Radera" }
 
 				handleYup={ (article) => this.parent.onRowDeleteLeft(article.secId, article.rowId, article.rowMap, article) }
 				handleNope={ (article) => this.parent.onRowDeleteRight(article.secId, article.rowId, article.rowMap, article) }
@@ -66,6 +91,46 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: GLOBAL.COLOR.GREY_BACKGROUND
+	},
+
+	yup: {
+		backgroundColor: GLOBAL.COLOR.POSITIVE,
+		position: 'absolute',
+		padding: 20,
+		top: Dimensions.get('window').height / 2 - 30,
+		borderRadius: 4,
+		left: 20
+	},
+
+	yupText: {
+		fontSize: 16,
+		fontFamily: 'Merriweather',
+		color: 'white',
+	},
+
+	yupArchive: {
+		backgroundColor: GLOBAL.COLOR.HIGHLIGHT,
+
+	},
+	yupArchiveText: {
+		fontSize: 16,
+		fontFamily: 'Merriweather',
+		color: GLOBAL.COLOR.HIGHLIGHT,
+	},
+
+	nope: {
+		backgroundColor: GLOBAL.COLOR.NEGATIVE,
+		position: 'absolute',
+		padding: 20,
+		top: Dimensions.get('window').height / 2 - 30,
+		borderRadius: 4,
+		right: 20
+	},
+
+	nopeText: {
+		fontSize: 16,
+		fontFamily: 'Merriweather',
+		color: 'white',
 	},
 
 	card: {

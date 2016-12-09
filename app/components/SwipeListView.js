@@ -90,8 +90,8 @@ class SwipeListView extends Component {
 					onRowOpen={ _ => this.onRowOpen(secId, rowId, this._rows) }
 					onRowClose={ _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows) }
 					onRowPress={ _ => this.onRowPress(`${secId}${rowId}`) }
-					onRowDeleteLeft={ _ => this.parent.onRowDeleteLeft(secId, rowId, this._rows) }
-					onRowDeleteRight={ _ => this.parent.onRowDeleteRight(secId, rowId, this._rows) }
+					onRowDeleteLeft={ _ => this.parent.onRowDeleteLeft(secId, rowId, this._rows, rowData) }
+					onRowDeleteRight={ _ => this.parent.onRowDeleteRight(secId, rowId, this._rows, rowData) }
 					parent={ this.parent }
 					setScrollEnabled={ (enable) => this.setScrollEnabled(enable) }
 					leftOpenValue={this.props.leftOpenValue}

@@ -50,8 +50,8 @@ export default class ArticlesTinderView extends Component {
 				renderCard={ (article) => this._renderCard(article) }
 				renderNoMoreCards={ () => this.closeView() }
 
-				handleYup={ (article) => this.parent.onRowDeleteLeft(article.secId, article.rowId, article.rowMap, article.uuid) }
-				handleNope={ (article) => this.parent.onRowDeleteRight(article.secId, article.rowId, article.rowMap, article.uuid) }
+				handleYup={ (article) => this.parent.onRowDeleteLeft(article.secId, article.rowId, article.rowMap, article) }
+				handleNope={ (article) => this.parent.onRowDeleteRight(article.secId, article.rowId, article.rowMap, article) }
 			/>
 		)
 	}

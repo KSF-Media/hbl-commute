@@ -39,9 +39,9 @@ export default class ArticlesSwipeListView extends Component {
 		};
 	}
 
-	onRowDeleteLeft(secId, rowId, rowMap, uuid) {
+	onRowDeleteLeft(secId, rowId, rowMap, article) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleSaved', Uuid: uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
+		TriggerEvent({ Event:'articleSaved', Uuid: article.uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
 		if(this.props.parent._badge) {
 			this.props.parent.state.badgeCount++;
 			this.props.parent._badge.setNativeProps({
@@ -51,9 +51,10 @@ export default class ArticlesSwipeListView extends Component {
 		}
 	}
 
-	onRowDeleteRight(secId, rowId, rowMap, uuid) {
+	onRowDeleteRight(secId, rowId, rowMap, article) {
+		console.log(article.uuid);
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleDeleted', Uuid: uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
+		TriggerEvent({ Event:'articleDeleted', Uuid: article.uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
 	}
 
 	deleteRow(secId, rowId, rowMap) {
@@ -104,8 +105,6 @@ export default class ArticlesSwipeListView extends Component {
 	isArticleRead(article) {
 		var isRead = false;
 		this.state.readArticles.map(function(object) {
-			console.log(object.uuid);
-			console.log(article.uuid);
 			if(object.uuid === article.uuid) {
 				isRead = true;
 				return false;

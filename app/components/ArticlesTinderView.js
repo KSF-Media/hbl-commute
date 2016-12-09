@@ -4,10 +4,10 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	Dimensions,
-	Icon
+	Dimensions
 } from 'react-native';
 import SwipeCards from 'react-native-swipe-cards';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { TruncateString } from '../helpers/Functions';
 import { TimestampToHoursAndMinutes } from '../helpers/Functions';
 import * as GLOBAL from '../Globals';
@@ -23,12 +23,13 @@ export default class ArticlesTinderView extends Component {
 	}
 
 	closeView() {
-
+		this.parent.showSwipeList();
 	}
 
 	_renderCard(article) {
 		return (
 			<View style={ styles.card }>
+				<Icon style={ styles.closeButton } name="times" size={ 20 } color={ '#333333' } onPress={ _ => this.closeView() } />
 				<Text style={ styles.articleTitle }>{ article.title }</Text>
 				<View style={ styles.articleMainTagAndPublishedAt }>
 					<Text style={ styles.articleMainTag }>{ article.mainTag }</Text>
@@ -45,7 +46,7 @@ export default class ArticlesTinderView extends Component {
 	_renderYupView() {
 		return (
 			<Text>
-				<Icon name={ this.props.useStarIcon ? 'star' : 'heart' } size={ 60 } color={ GLOBAL.COLOR.POSITIVE } />
+				<Icon name={ this.props.useStarIcon ? 'star' : 'heart' } size={ 60 } color={ this.props.useStarIcon ? GLOBAL.COLOR.HIGHLIGHT : GLOBAL.COLOR.POSITIVE } />
 			</Text>
 		)
 	}
@@ -53,7 +54,7 @@ export default class ArticlesTinderView extends Component {
 	_renderNoView() {
 		return (
 			<Text>
-				<Icon name="star" size={ 60 } color={ GLOBAL.COLOR.HIGHLIGHT } />
+				<Icon name="times" size={ 60 } color={ GLOBAL.COLOR.NEGATIVE } />
 			</Text>
 		)
 	}
@@ -68,12 +69,10 @@ export default class ArticlesTinderView extends Component {
 				renderNoMoreCards={ () => this.closeView() }
 
 				yupStyle={ [styles.yup, ( this.props.useStarIcon ? styles.yupArchive : false )] }
-				yupTextStyle={ [styles.yupText, ( this.props.useStarIcon ? styles.yupArchiveText : false )] }
-				yupText={  this.props.useStarIcon ? "Arkivera" : "Gilla" }
-
 				nopeStyle={ [styles.nope] }
-				nopeTextStyle={ [styles.nopeText] }
-				noText={ "Radera" }
+
+				yupView={ this._renderYupView() }
+				noView={ this._renderNoView() }
 
 				handleYup={ (article) => this.parent.onRowDeleteLeft(article.secId, article.rowId, article.rowMap, article) }
 				handleNope={ (article) => this.parent.onRowDeleteRight(article.secId, article.rowId, article.rowMap, article) }
@@ -94,7 +93,6 @@ const styles = StyleSheet.create({
 	},
 
 	yup: {
-		backgroundColor: GLOBAL.COLOR.POSITIVE,
 		position: 'absolute',
 		padding: 20,
 		top: Dimensions.get('window').height / 2 - 30,
@@ -102,35 +100,12 @@ const styles = StyleSheet.create({
 		left: 20
 	},
 
-	yupText: {
-		fontSize: 16,
-		fontFamily: 'Merriweather',
-		color: 'white',
-	},
-
-	yupArchive: {
-		backgroundColor: GLOBAL.COLOR.HIGHLIGHT,
-
-	},
-	yupArchiveText: {
-		fontSize: 16,
-		fontFamily: 'Merriweather',
-		color: GLOBAL.COLOR.HIGHLIGHT,
-	},
-
 	nope: {
-		backgroundColor: GLOBAL.COLOR.NEGATIVE,
 		position: 'absolute',
 		padding: 20,
 		top: Dimensions.get('window').height / 2 - 30,
 		borderRadius: 4,
 		right: 20
-	},
-
-	nopeText: {
-		fontSize: 16,
-		fontFamily: 'Merriweather',
-		color: 'white',
 	},
 
 	card: {
@@ -150,12 +125,20 @@ const styles = StyleSheet.create({
 		}
 	},
 
+	closeButton: {
+		position: 'absolute',
+		top: 10,
+		right: 10,
+		zIndex: 1000,
+	},
+
 	articleTitle: {
 		fontFamily: 'Merriweather',
 		fontSize: 22,
 		padding: 0,
 		letterSpacing: 0,
 		marginBottom: 15,
+		paddingRight: 40
 	},
 
 	articleMainTagAndPublishedAt: {

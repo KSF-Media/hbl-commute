@@ -40,7 +40,7 @@ export default class ArticlesSwipeListView extends Component {
 	}
 
 	onRowDeleteLeft(secId, rowId, rowMap, article) {
-		this.deleteRow(secId, rowId, rowMap);
+		this.deleteRow(secId, rowId, rowMap, article);
 		TriggerEvent({ eventName:'articleSaved', articleUuid: article.uuid });
 		if(this.props.parent._badge) {
 			this.props.parent.state.badgeCount++;
@@ -53,16 +53,15 @@ export default class ArticlesSwipeListView extends Component {
 
 	onRowDeleteRight(secId, rowId, rowMap, article) {
 		console.log(article.uuid);
-		this.deleteRow(secId, rowId, rowMap);
+		this.deleteRow(secId, rowId, rowMap, article);
 		TriggerEvent({ eventName:'articleDeleted', articleUuid: article.uuid });
 	}
 
-	deleteRow(secId, rowId, rowMap) {
-		const newData = [...this.state.listViewData];
+	deleteRow(secId, rowId, rowMap, article) {
+		var newData = [...this.state.listViewData];
 		var self = this;
 		if(rowMap) {
 			var row = rowMap[`${secId}${rowId}`];
-
 			row.animateUpHiddenRow();
 			setTimeout(function(){
 				row.resetRow();
@@ -73,17 +72,32 @@ export default class ArticlesSwipeListView extends Component {
 				});
 			}, 300);
 		} else {
-			this.setState({
-				currentArticle: null,
-				fadeAnim: new Animated.Value(0)
+			for(var i = 0; i < newData.length; i++) {
+				if(newData[i] && newData[i].uuid === article.uuid) {
+					newData.splice(i, 1);
+					break;
+				}
+			}
+			self.setState({
+				listViewData: newData,
+				currentArticle: null
 			});
-			setTimeout(function(){
-				Animated.timing(
-					self.state.fadeAnim,
-					{ toValue: 1 }
-				).start();
-			}, 100);
+			this.showSwipeList();
 		}
+	}
+
+	showSwipeList() {
+		var self = this;
+		this.setState({
+			currentArticle: null,
+			fadeAnim: new Animated.Value(0)
+		});
+		setTimeout(function(){
+			Animated.timing(
+				self.state.fadeAnim,
+				{ toValue: 1 }
+			).start();
+		}, 100);
 	}
 
 	articleRead(article, secId, rowId) {

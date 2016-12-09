@@ -24,6 +24,7 @@ module.exports = {
 			right: 1,
 			zIndex: 10,
 			height: 16,
+			paddingTop: 2,
 			width: 16,
 			lineHeight: 16,
 			fontSize: 12,

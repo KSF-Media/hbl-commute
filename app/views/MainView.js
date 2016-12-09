@@ -38,7 +38,7 @@ export default class MainView extends Component {
 			);
 		} else {
 			var rightButtonConfig = {
-				title: 'Mitt läslista',
+				title: 'Min läslista',
 				handler: function () {
 					self.props.navigator.push(GLOBAL.ROUTES[1]);
 				}

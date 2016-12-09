@@ -41,7 +41,7 @@ export default class ArticlesSwipeListView extends Component {
 
 	onRowDeleteLeft(secId, rowId, rowMap, article) {
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleSaved', Uuid: article.uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
+		TriggerEvent({ eventName:'articleSaved', articleUuid: article.uuid });
 		if(this.props.parent._badge) {
 			this.props.parent.state.badgeCount++;
 			this.props.parent._badge.setNativeProps({
@@ -54,7 +54,7 @@ export default class ArticlesSwipeListView extends Component {
 	onRowDeleteRight(secId, rowId, rowMap, article) {
 		console.log(article.uuid);
 		this.deleteRow(secId, rowId, rowMap);
-		TriggerEvent({ Event:'articleDeleted', Uuid: article.uuid, deviceUuid: GLOBAL.deviceInfo.deviceUID, deviceDetails:GLOBAL.deviceInfo.deviceDetails });
+		TriggerEvent({ eventName:'articleDeleted', articleUuid: article.uuid });
 	}
 
 	deleteRow(secId, rowId, rowMap) {
@@ -87,6 +87,7 @@ export default class ArticlesSwipeListView extends Component {
 	}
 
 	articleRead(article, secId, rowId) {
+		TriggerEvent({ eventName:'articleRead', articleUuid: article.uuid });
 		article.secId = secId;
 		article.rowId = rowId;
 		this.setState({

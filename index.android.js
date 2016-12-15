@@ -1,53 +1,45 @@
 /**
- * Sample React Native App
+ * KSF HBL Commute
  * https://github.com/facebook/react-native
  * @flow
  */
 
+//'use strict';
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
+	AppRegistry,
+	Navigator,
+	TouchableHighlight,
+	Text
 } from 'react-native';
 
-export default class HBLCommute extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+import * as GLOBAL from './app/Globals';
+import MainView from './app/views/MainView';
+import MyListView from './app/views/MyListView';
+import ArchiveView from './app/views/ArchiveView';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+export default class HBLCommute extends Component {
+
+	screenToRender(route, navigator) {
+		if(route.id === "main") {
+			return <MainView navigator={ navigator } />;
+		} else if(route.id === "my-list") {
+			return <MyListView navigator={ navigator } />;
+		} else if(route.id === 'archive') {
+			return <ArchiveView navigator={ navigator } />;
+		}
+	}
+
+	render() {
+		const routes = GLOBAL.ROUTES;
+		return (
+			<Navigator
+				initialRoute={ routes[0] }
+				renderScene={ (route, navigator) => this.screenToRender(route, navigator) }
+			/>
+		);
+	}
+
+}
 
 AppRegistry.registerComponent('HBLCommute', () => HBLCommute);
